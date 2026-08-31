@@ -58,6 +58,7 @@ The models were evaluated using standard object detection metrics, including mea
 Training and evaluation notebooks are available in model-training/.
 
 **2. Large-Scale Inference and Mapping**
+
 Following model evaluation, selected object detection models were applied to aerial imagery of electrical substations across the United States.
 
 National Agriculture Imagery Program (NAIP) imagery was used as the primary source of aerial imagery.
@@ -77,22 +78,17 @@ Model detections were aggregated to examine geographic patterns in electrical su
 
 Scripts used to generate the figures presented in the manuscript are available in graphs/.
 
-# Dataset
+## Dataset
 
 The object detection dataset consists of aerial images containing annotated electrical substation components, and is located in dataset/.
 
-The final detection classes are:
-
-Transformers
-Circuit breakers
-Reactors
-Alternative energy systems
+The substation component classes detected are transformer, circuit breaker, reactor, and alternative energy systems.
 
 Additional information regarding dataset construction, annotation procedures, and training/validation/test splitting is provided in the associated manuscript.
 
 NAIP imagery is available through the U.S. Department of Agriculture and associated public geospatial data services.
 
-Installation
+## Installation
 
 Clone this repository:
 
@@ -105,7 +101,7 @@ pip install -r requirements.txt
 
 Specific object detection frameworks may have additional installation requirements. See the comments and setup instructions within the corresponding model-training notebooks.
 
-Reproducing the Analysis
+## Reproducing the Analysis
 
 The general workflow for reproducing the study is:
 
@@ -135,7 +131,7 @@ Use the scripts in graphs/ to reproduce figures used in the manuscript.
 
 Precomputed numerical results used in the manuscript are provided in results/ where redistribution is appropriate.
 
-Results
+## Results
 
 Machine-readable results underlying the principal analyses are provided in the results/ directory.
 
@@ -143,23 +139,13 @@ These files include model-performance measurements and aggregated geographic res
 
 See the manuscript for interpretation and discussion of these results.
 
-Reproducibility
+## Reproducibility
 
 This repository is intended to provide the code and supporting materials necessary to understand and reproduce the computational analyses reported in the associated research.
 
 A versioned archival snapshot of the repository associated with the manuscript is preserved through Zenodo.
 
 Zenodo DOI: [add DOI after creating the Zenodo release]
-
-Associated Publication
-
-Comparing Object Detection Models for Electrical Substation Component Mapping 
-
-Namish Bansal, Haley Mody, et al.
-
-Status: Manuscript in preperation.
-
-Paper: [add DOI or arXiv URL]
 
 ## Associated Publication
 
@@ -172,7 +158,7 @@ Namish Bansal*, Haley Mody*, et al.
 
 An earlier version of this work is available as an arXiv preprint: [[arXiv link]](https://arxiv.org/abs/2512.22454).
 
-Citation
+## Citation
 
 If you use this code or the associated research, please cite the corresponding paper:
 
@@ -183,7 +169,7 @@ Bansal, N., Haley M., et al. ([YEAR]).
 
 A machine-readable citation is also provided in CITATION.cff.
 
-License
+## License
 
 See the LICENSE file for information regarding permitted use and redistribution of the code contained in this repository.
 
