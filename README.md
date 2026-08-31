@@ -7,6 +7,7 @@ This study trains, benchmarks, and compares 16 object detection models from vary
 and the resulting detections are utilized to characterize the geographic distribution of substation infrastructure at state and FERC-based regional scales.
 
 # Repository Structure
+```text
 substation-detection/
 ├── model-training/
 │   ├── yolo_model_training.ipynb
@@ -29,14 +30,15 @@ substation-detection/
 │   ├── state_component_counts.csv
 │   ├── region_component_counts.csv
 │   └── statistical_analysis.csv
-|
+│
 ├── data/
 │   ├── substation_coordinates.csv
-│   ├── per_class_imagery.zip
+│   └── per_class_imagery.zip
 │
 ├── requirements.txt
 ├── LICENSE
 └── README.md
+```
 
 # Methodology
 The research workflow consists of three primary stages:
