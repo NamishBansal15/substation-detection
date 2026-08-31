@@ -33,7 +33,7 @@ plt.rcParams.update({
 })
 
 ROOT = Path(__file__).resolve().parent
-COMPONENTS = ["Transformer", "Reactor", "Circuit Breaker", "Alt Energy", "Control", "Power Lines"]
+COMPONENTS = ["Transformer", "Reactor", "Circuit Breaker", "Alt Energy"]
 SMALL = ["VT", "NH", "MA", "RI", "CT", "NJ", "DE", "MD", "DC"]
 
 
@@ -56,7 +56,7 @@ def load_states():
     rows = [{"STATE": code, "name": item["name"], "geometry": polygons_from_bokeh(item)}
             for code, item in state_data.items() if code not in {"AK", "HI"}]
     states = gpd.GeoDataFrame(rows, crs="EPSG:4326")
-    totals = pd.read_csv(ROOT / "results" / "state_totals.csv")
+    totals = pd.read_csv(ROOT / "state_component_counts.csv")
     totals["TOTAL"] = totals[COMPONENTS].sum(axis=1)
     states = states.merge(totals[["STATE", "TOTAL"]], on="STATE", how="left").fillna({"TOTAL": 0})
     area = states.to_crs("EPSG:5070").area / 1e6
