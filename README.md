@@ -55,7 +55,7 @@ The evaluated model families include:
 
 The models were evaluated using standard object detection metrics, including mean average precision at an intersection-over-union threshold of 0.50 (mAP@50) and mean average precision across IoU thresholds from 0.50 to 0.95 (mAP@50:95).
 
-Training and evaluation notebooks are available in model-training/.
+Training and evaluation notebooks are available in **model-training/**.
 
 **2. Large-Scale Inference and Mapping**
 
@@ -70,17 +70,17 @@ The inference workflow includes:
 - generating component-level detections and aggregating detections geographically.
 
 Model detections were aggregated to examine geographic patterns in electrical substation infrastructure, with analysis including comparison across US states and FERC regions.
-The relevant notebooks are available in inference-mapping/.
+The relevant notebooks are available in **inference-mapping/**.
 
 **3. Geographic and Statistical Analysis**
 
 Model detections were aggregated to examine geographic patterns in electrical substation infrastructure. Analysis includes comparisons across models utilized, counts of US states and FERC regions. 
 
-Scripts used to generate the figures presented in the manuscript are available in graphs/.
+Scripts used to generate the figures presented in the manuscript are available in **graphs/**.
 
 ## Dataset
 
-The object detection dataset consists of aerial images containing annotated electrical substation components, and is located in dataset/.
+The object detection dataset consists of aerial images containing annotated electrical substation components, and is located in **dataset/**.
 
 The substation component classes detected are transformer, circuit breaker, reactor, and alternative energy systems.
 
