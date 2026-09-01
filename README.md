@@ -1,12 +1,13 @@
-# Comparing Object Detection Models for Electrical Substation Component Mapping 
+# Comparing Object Detection Models for Electrical Substation Component Mapping
 
-This repository is a supplement to our research on the automated mapping and large-scale detection of electrical substation components from Google Earth-based aerial imagery, 
-utilizing computer-vision-based object detection models. 
+This repository contains the code, processed data, and supporting materials for our research on the automated mapping and large-scale detection of electrical substation components from aerial imagery using computer-vision-based object detection models.
 
-This study trains, benchmarks, and compares 16 object detection models from varying sizes and families. These models are applied to substation inference mapping across the United States, 
-and the resulting detections are utilized to characterize the geographic distribution of substation infrastructure at state and FERC-based regional scales.
+The study trains, benchmarks, and compares **16 object detection models** across multiple architecture families and model sizes. Selected models are subsequently applied to aerial imagery of electrical substations across the United States. The resulting detections are used to characterize the geographic distribution of substation infrastructure at **state** and **FERC regional** scales.
 
-# Repository Structure
+---
+
+## Repository Structure
+
 ```text
 substation-detection/
 ├── model-training/
@@ -27,9 +28,9 @@ substation-detection/
 │
 ├── results/
 │   ├── model_performance.csv
-|   ├── model_bootstrapping_CIs.csv
+│   ├── model_bootstrapping_CIs.csv
 │   ├── state_component_counts.csv
-│   ├── ferc_region_component_counts.csv
+│   └── ferc_region_component_counts.csv
 │
 ├── data/
 │   ├── component_predictions.csv
@@ -38,146 +39,229 @@ substation-detection/
 │   ├── substation_coordinates.parquet
 │   └── us_state_populations.csv
 │
+├── evaluate.py
+├── sweep.py
+├── train.py
 ├── requirements.txt
-├── LICENSE
+├── .gitignore
 └── README.md
 ```
 
-# Methodology
-The research workflow consists of three primary stages:
+---
 
-**1. Model Training and Evaluation**
+## Methodology
+
+The research workflow consists of three primary stages.
+
+### 1. Model Training and Evaluation
 
 Multiple object detection architectures were trained and evaluated for identifying electrical substation components in aerial imagery.
 
 The evaluated model families include:
 
-- YOLO
-- Cascade R-CNN
-- RF-DETR
+* **YOLO**
+* **Cascade R-CNN**
+* **RF-DETR**
 
-The models were evaluated using standard object detection metrics, including mean average precision at an intersection-over-union threshold of 0.50 (mAP@50) and mean average precision across IoU thresholds from 0.50 to 0.95 (mAP@50:95).
+Models were trained and evaluated on six annotated classes:
 
-Training and evaluation notebooks are available in **model-training/**.
+* **Transformer**
+* **Circuit Breaker**
+* **Reactor**
+* **Alternative Energy Systems**
+* **Control**
+* **Power Lines**
 
-**2. Large-Scale Inference and Mapping**
+Model performance was evaluated using standard object detection metrics, including:
+
+* **mAP@50** — mean average precision at an intersection-over-union (IoU) threshold of 0.50
+* **mAP@50:95** — mean average precision across IoU thresholds from 0.50 to 0.95
+
+The reported aggregate mAP metrics evaluate performance across all six training classes.
+
+Training and evaluation notebooks are available in [`model-training/`](./model-training/).
+
+### 2. Large-Scale Inference and Mapping
 
 Following model evaluation, selected object detection models were applied to aerial imagery of electrical substations across the United States.
 
-National Agriculture Imagery Program (NAIP) imagery was used as the primary source of aerial imagery.
+**National Agriculture Imagery Program (NAIP)** imagery was used as the primary source of imagery for large-scale inference.
 
 The inference workflow includes:
 
-- extracting the corresponding NAIP imagery from a CSV file of substation locations;
-- applying trained object detection models to extracted imagery;
-- generating component-level detections and aggregating detections geographically.
+1. extracting NAIP imagery corresponding to known substation locations;
+2. applying trained object detection models to the extracted imagery;
+3. generating component-level detections; and
+4. aggregating detections geographically.
 
-Model detections were aggregated to examine geographic patterns in electrical substation infrastructure, with analysis including comparison across US states and FERC regions.
-The relevant notebooks are available in **inference-mapping/**.
+Control and power-line detections were excluded from the downstream geographic analysis. Accordingly, the large-scale component-mapping analysis focuses on four retained component classes:
 
-**3. Geographic and Statistical Analysis**
+* **Transformer**
+* **Circuit Breaker**
+* **Reactor**
+* **Alternative Energy Systems**
 
-Model detections were aggregated to examine geographic patterns in electrical substation infrastructure. Analysis includes comparisons across models utilized, counts of US states and FERC regions. 
+Additional information regarding the class-selection methodology and rationale is provided in the associated manuscript.
 
-Scripts used to generate the figures presented in the manuscript are available in **graphs/**.
+The relevant notebooks are available in [`inference-mapping/`](./inference-mapping/).
+
+### 3. Geographic and Statistical Analysis
+
+Component detections were aggregated to characterize geographic patterns in electrical substation infrastructure across the United States.
+
+The downstream analysis includes:
+
+* comparisons among models used for large-scale inference;
+* component counts across U.S. states;
+* component counts across FERC regions; and
+* geographic and statistical analyses of detected infrastructure.
+
+Scripts used to generate figures presented in the associated manuscript are available in [`graphs/`](./graphs/).
+
+---
 
 ## Dataset
 
-The object detection dataset consists of aerial images containing annotated electrical substation components, and is located in **dataset/**.
+The object detection dataset consists of aerial images containing manually annotated electrical substation components.
 
-The substation component classes detected are transformer, circuit breaker, reactor, and alternative energy systems.
+The models were trained and evaluated using six component classes:
 
-Additional information regarding dataset construction, annotation procedures, and training/validation/test splitting is provided in the associated manuscript.
+1. Transformer
+2. Circuit Breaker
+3. Reactor
+4. Alternative Energy Systems
+5. Control
+6. Power Lines
 
-NAIP imagery is available through the U.S. Department of Agriculture and associated public geospatial data services.
+The subsequent geographic and statistical analyses were restricted to **transformers, circuit breakers, reactors, and alternative energy systems**.
+
+Additional information regarding dataset construction, annotation procedures, class selection, and training/validation/test splitting is provided in the associated manuscript.
+
+The annotated object-detection dataset is not stored directly in this GitHub repository due to its size. Information regarding access to the dataset will be provided with the associated archival release.
+
+NAIP imagery used for large-scale inference is publicly available through the **U.S. Department of Agriculture National Agriculture Imagery Program** and associated geospatial data services.
+
+---
 
 ## Installation
 
-Clone this repository:
+Clone the repository:
 
+```bash
 git clone https://github.com/NamishBansal15/substation-detection.git
 cd substation-detection
+```
 
 Install the required Python packages:
 
+```bash
 pip install -r requirements.txt
+```
 
-Specific object detection frameworks may have additional installation requirements. See the comments and setup instructions within the corresponding model-training notebooks.
+Specific object detection frameworks may have additional installation requirements. See the comments and setup instructions within the corresponding notebooks in [`model-training/`](./model-training/).
+
+---
 
 ## Reproducing the Analysis
 
-The general workflow for reproducing the study is:
+The general computational workflow is:
 
-Dataset
-   ↓
+```text
+Annotated Dataset
+       ↓
 Model Training
-   ↓
+       ↓
 Model Evaluation
-   ↓
+       ↓
 NAIP Image Extraction
-   ↓
+       ↓
 Large-Scale Model Inference
-   ↓
+       ↓
 Component Count Generation
-   ↓
+       ↓
 Geographic / Statistical Analysis
-   ↓
+       ↓
 Figures and Tables
+```
 
 The relevant files should generally be executed in the following order:
 
-Run the appropriate notebook in model-training/ to train and evaluate an object detection architecture using the data from the ZIP file in dataset/.
-Use inference-mapping/naip_image_extraction.ipynb to obtain the required aerial imagery.
-Run inference-mapping/model-based-prediction.ipynb to perform component detection.
-Run inference-mapping/count-generation.ipynb to aggregate the resulting detections.
-Use the scripts in graphs/ to reproduce figures used in the manuscript.
+1. Run the appropriate notebook in [`model-training/`](./model-training/) to train and evaluate an object detection architecture.
+2. Use [`inference-mapping/naip_image_extraction.ipynb`](./inference-mapping/naip_image_extraction.ipynb) to obtain the required NAIP imagery.
+3. Run [`inference-mapping/model-based-prediction.ipynb`](./inference-mapping/model-based-prediction.ipynb) to perform component detection.
+4. Run [`inference-mapping/count-generation.ipynb`](./inference-mapping/count-generation.ipynb) to aggregate component detections geographically.
+5. Use the scripts in [`graphs/`](./graphs/) to reproduce the figures used in the manuscript.
 
-Precomputed numerical results used in the manuscript are provided in results/ where redistribution is appropriate.
+Precomputed numerical results underlying the manuscript are provided in [`results/`](./results/).
 
-## Results
+---
 
-Machine-readable results underlying the principal analyses are provided in the results/ directory.
+## Data and Results
 
-These files include model-performance measurements and aggregated geographic results used to generate figures and tables in the associated manuscript.
+The [`data/`](./data/) directory contains processed data used by the inference-mapping and geographic-analysis workflows, including component-level predictions, image metadata, geographic boundaries, substation coordinates, and population data.
 
-See the manuscript for interpretation and discussion of these results.
+The [`results/`](./results/) directory contains machine-readable numerical results underlying the principal analyses presented in the manuscript.
 
-## Reproducibility
+These include:
+
+* model-performance measurements;
+* bootstrap confidence intervals;
+* state-level component counts; and
+* FERC-region component counts.
+
+See the associated manuscript for interpretation and discussion of these results.
+
+---
+
+## Reproducibility and Archival
 
 This repository is intended to provide the code and supporting materials necessary to understand and reproduce the computational analyses reported in the associated research.
 
-A versioned archival snapshot of the repository associated with the manuscript is preserved through Zenodo.
+A versioned archival snapshot associated with the manuscript will be preserved through **Zenodo**.
 
-Zenodo DOI: [add DOI after creating the Zenodo release]
+**Zenodo DOI:** `[add DOI after creating archival release]`
+
+---
 
 ## Associated Publication
 
-**[Comparing Object Detection Models for Electrical Substation Component Mapping]**
+### *Comparing Object Detection Models for Electrical Substation Component Mapping*
 
-Namish Bansal*, Haley Mody*, et al.
-*These authors contributed equally to this work.*
+**Namish Bansal*, Haley Mody*, et al.**
+
+*These authors contributed equally to this work.
 
 **Status:** Manuscript in preparation.
 
-An earlier version of this work is available as an arXiv preprint: [[arXiv link]](https://arxiv.org/abs/2512.22454).
+An earlier version of this work is available as an arXiv preprint:
+
+**arXiv:2512.22454**
+
+---
 
 ## Citation
 
-If you use this code or the associated research, please cite the corresponding paper:
+If you use this repository or the associated research, please cite the corresponding publication:
 
-Bansal, N., Haley M., et al. ([YEAR]).
+```text
+Bansal, N., Mody, H., et al. ([YEAR]).
 "[PAPER TITLE]."
 [JOURNAL].
 [DOI]
+```
 
-A machine-readable citation is also provided in CITATION.cff.
+A machine-readable citation file will also be provided as `CITATION.cff`.
+
+---
 
 ## License
 
-See the LICENSE file for information regarding permitted use and redistribution of the code contained in this repository.
+Licensing information for the original code in this repository will be provided in the `LICENSE` file.
 
-Licensing or usage conditions applicable to third-party datasets, imagery, pretrained models, or software remain governed by their respective providers.
+Licensing and usage conditions applicable to third-party datasets, imagery, pretrained models, and software remain governed by their respective providers.
 
-Contact
+---
 
-For questions regarding this repository or the associated research, please open an issue through GitHub or contact the authors through the information provided in the associated publication.
+## Contact
+
+For questions regarding this repository or the associated research, please open an issue through GitHub or contact the authors using the information provided in the associated publication.
