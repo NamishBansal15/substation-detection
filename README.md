@@ -39,9 +39,6 @@ substation-detection/
 │   ├── substation_coordinates.parquet
 │   └── us_state_populations.csv
 │
-├── evaluate.py
-├── sweep.py
-├── train.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
