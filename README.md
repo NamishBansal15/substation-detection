@@ -237,16 +237,6 @@ An earlier version of this work is available as an arXiv preprint:
 
 **arXiv:2512.22454**
 
----
-
-## License
-
-Licensing information for the original code in this repository will be provided in the `LICENSE` file.
-
-Licensing and usage conditions applicable to third-party datasets, imagery, pretrained models, and software remain governed by their respective providers.
-
----
-
 ## Contact
 
-For questions regarding this repository or the associated research, please open an issue through GitHub or contact the authors using the information provided in the associated publication.
+For questions regarding this repository or the associated research, please open an issue through GitHub or contact the authors via namishemail@gmail.com and hdmody09@gmail.com
