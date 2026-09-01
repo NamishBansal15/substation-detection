@@ -27,13 +27,16 @@ substation-detection/
 │
 ├── results/
 │   ├── model_performance.csv
+|   ├── model_bootstrapping_CIs.csv
 │   ├── state_component_counts.csv
-│   ├── region_component_counts.csv
-│   └── statistical_analysis.csv
+│   ├── ferc_region_component_counts.csv
 │
 ├── data/
-│   ├── substation_coordinates.csv
-│   └── per_class_imagery.zip
+│   ├── component_predictions.csv
+│   ├── image_metadata.csv
+│   ├── nerc_gdf.geojson
+│   ├── substation_coordinates.parquet
+│   └── us_state_populations.csv
 │
 ├── requirements.txt
 ├── LICENSE
