@@ -40,7 +40,6 @@ substation-detection/
 │   └── us_state_populations.csv
 │
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
