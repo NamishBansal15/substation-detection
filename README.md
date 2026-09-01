@@ -239,21 +239,6 @@ An earlier version of this work is available as an arXiv preprint:
 
 ---
 
-## Citation
-
-If you use this repository or the associated research, please cite the corresponding publication:
-
-```text
-Bansal, N., Mody, H., et al. ([YEAR]).
-"[PAPER TITLE]."
-[JOURNAL].
-[DOI]
-```
-
-A machine-readable citation file will also be provided as `CITATION.cff`.
-
----
-
 ## License
 
 Licensing information for the original code in this repository will be provided in the `LICENSE` file.
