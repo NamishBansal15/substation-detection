@@ -39,13 +39,15 @@ import matplotlib.patches as patches
 import contextily as ctx
 from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from bokeh.sampledata.us_states import data as state_data
+from shapely.geometry import MultiPolygon, Polygon
 
 
 # ============================================================
 # PATHS
 # ============================================================
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 OUTPUT_DIR = ROOT / "results"
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -98,7 +100,6 @@ def load_and_prepare_data():
         PREDICTIONS_PATH,
         POPULATION_PATH,
         NERC_SHAPE,
-        STATE_SHAPE,
     ]
     missing = [p for p in required if not p.exists()]
     if missing:
@@ -106,7 +107,7 @@ def load_and_prepare_data():
         raise FileNotFoundError(
             "The following required files are missing:\n"
             f"{missing_text}\n\n"
-            "Place them in the data/ folder beside this script."
+            "Place them in the repository data/ folder."
         )
 
     meta = pd.read_csv(IMAGE_METADATA_PATH)
@@ -126,10 +127,36 @@ def load_and_prepare_data():
         crs="EPSG:4326",
     )
 
-    states = gpd.read_file(STATE_SHAPE)[["STUSPS", "geometry", "ALAND"]]
-    states = states.rename(columns={"STUSPS": "STATE"}).to_crs("EPSG:4326")
-    states = states.merge(pop_df, on="STATE", how="left")
+    if STATE_SHAPE.exists():
+        states = gpd.read_file(STATE_SHAPE)[["STUSPS", "geometry", "ALAND"]]
+        states = states.rename(columns={"STUSPS": "STATE"}).to_crs("EPSG:4326")
+    else:
+        # Reproducible fallback: Bokeh ships U.S. state polygons, avoiding a
+        # separate shapefile that was not included in the repository.
+        def _state_geometry(item):
+            lons, lats = item["lons"], item["lats"]
+            parts, current = [], []
+            for lon, lat in zip(lons, lats):
+                if np.isnan(lon) or np.isnan(lat):
+                    if len(current) >= 3:
+                        parts.append(Polygon(current))
+                    current = []
+                else:
+                    current.append((lon, lat))
+            if len(current) >= 3:
+                parts.append(Polygon(current))
+            return parts[0] if len(parts) == 1 else MultiPolygon(parts)
 
+        rows = [
+            {"STATE": code, "geometry": _state_geometry(item)}
+            for code, item in state_data.items()
+            if code not in {"AK", "HI", "PR"}
+        ]
+        states = gpd.GeoDataFrame(rows, crs="EPSG:4326")
+        projected = states.to_crs("EPSG:5070")
+        states["ALAND"] = projected.area.to_numpy()
+
+    states = states.merge(pop_df, on="STATE", how="left")
     states["POPULATION"] = states["POPULATION"].fillna(0)
     states["AREA_SQM"] = states["ALAND"]
     states["AREA_SQKM"] = states["ALAND"] / 1_000_000

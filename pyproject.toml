@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "substation-detection"
+version = "0.1.0"
+description = "Reproducible code and processed data for electrical substation component mapping from aerial imagery."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  {name = "Namish Bansal"},
+  {name = "Haley Mody"},
+]
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "matplotlib>=3.8",
+  "geopandas>=0.14",
+  "shapely>=2.0",
+  "pyproj>=3.6",
+  "fiona>=1.9",
+  "rtree>=1.1",
+  "contextily>=1.5",
+  "bokeh>=3.3",
+  "pyarrow>=14",
+  "requests>=2.31",
+  "tqdm>=4.66",
+  "bokeh_sampledata>=2024.2",
+]
+
+[project.optional-dependencies]
+notebooks = ["jupyterlab>=4", "ipykernel>=6"]
+yolo = ["torch", "torchvision", "ultralytics", "roboflow", "wandb"]
+rfdetr = ["torch", "torchvision", "rfdetr", "roboflow", "wandb"]
+cascade = ["torch", "torchvision", "roboflow", "wandb"]
+
+[project.scripts]
+reproduce-substation-analysis = "substation_detection.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/substation_detection"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

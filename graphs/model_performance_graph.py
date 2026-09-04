@@ -1,9 +1,14 @@
+from pathlib import Path
 import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.font_manager as fm # Alias font_manager as fm for brevity
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = ROOT / "results"
+OUTPUT_DIR.mkdir(exist_ok=True)
 
 # ════════════════════════════════════════════════════════════════
 # GLOBAL ACADEMIC STYLE CONFIGURATION
@@ -258,9 +263,10 @@ ax_b.legend(
 )
 
 # Removed plt.subplots_adjust(bottom=0.11) as legend is now internal.
-plt.savefig("master_dashboard_all_models_ci.png", dpi=600, bbox_inches="tight")
-plt.show()
-print("\n✅ Canvas successfully updated with corrected rfdetr-base validation data blocks!")
+output = OUTPUT_DIR / "master_dashboard_all_models_ci.png"
+plt.savefig(output, dpi=600, bbox_inches="tight")
+plt.close()
+print(f"Saved: {output}")
 
 # ════════════════════════════════════════════════════════════════
 # Summary Tables
@@ -270,7 +276,7 @@ print("\n--- Overall Model Performance Summary (mAP@50 and mAP@50:95) ---")
 summary_df = df[['model', 'architecture', 'final_mAP50', 'final_mAP50_95']].sort_values(by='final_mAP50', ascending=False).reset_index(drop=True)
 summary_df['final_mAP50'] = summary_df['final_mAP50'].map('{:.2f}%'.format)
 summary_df['final_mAP50_95'] = summary_df['final_mAP50_95'].map('{:.2f}%'.format)
-display(summary_df)
+print(summary_df.to_string(index=False))
 
 print("\n--- Average AP50 per Class Across All Models ---")
 class_avg_data = {}
@@ -281,4 +287,4 @@ for class_name_display in CLASSES:
 class_avg_df = pd.DataFrame(class_avg_data.items(), columns=['Class', 'Average AP50'])
 class_avg_df['Average AP50'] = class_avg_df['Average AP50'].map('{:.2f}%'.format)
 class_avg_df = class_avg_df.sort_values(by='Average AP50', ascending=False).reset_index(drop=True)
-display(class_avg_df)
+print(class_avg_df.to_string(index=False))

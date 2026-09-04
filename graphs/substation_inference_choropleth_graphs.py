@@ -6,7 +6,7 @@ import sys
 import tempfile
 from types import SimpleNamespace
 
-_CACHE = Path(__file__).resolve().parent / "map_cache"
+_CACHE = Path(__file__).resolve().parents[1] / "map_cache"
 _CACHE.mkdir(exist_ok=True)
 os.environ["TEMP"] = str(_CACHE)
 os.environ["TMP"] = str(_CACHE)
@@ -32,7 +32,7 @@ plt.rcParams.update({
     "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
 })
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 COMPONENTS = ["Transformer", "Reactor", "Circuit Breaker", "Alt Energy"]
 SMALL = ["VT", "NH", "MA", "RI", "CT", "NJ", "DE", "MD", "DC"]
 
@@ -56,7 +56,7 @@ def load_states():
     rows = [{"STATE": code, "name": item["name"], "geometry": polygons_from_bokeh(item)}
             for code, item in state_data.items() if code not in {"AK", "HI"}]
     states = gpd.GeoDataFrame(rows, crs="EPSG:4326")
-    totals = pd.read_csv(ROOT / "state_component_counts.csv")
+    totals = pd.read_csv(ROOT / "results" / "state_component_counts.csv")
     totals["TOTAL"] = totals[COMPONENTS].sum(axis=1)
     states = states.merge(totals[["STATE", "TOTAL"]], on="STATE", how="left").fillna({"TOTAL": 0})
     area = states.to_crs("EPSG:5070").area / 1e6
@@ -229,7 +229,7 @@ def main():
     fig.text(.995, .004, "Basemap © Esri, DeLorme, NAVTEQ", ha="right", fontsize=5.5, color="#7b858a")
     # Compact outer margins while preserving just enough row space for colorbars.
     fig.subplots_adjust(left=.012, right=.995, top=.915, bottom=.018, wspace=.018, hspace=.075)
-    out = ROOT / "current_image.png"
+    out = ROOT / "results" / "current_image.png"
     fig.savefig(out, dpi=240, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     print(f"Wrote {out}")
@@ -252,7 +252,7 @@ def vertical_main():
     fig.text(.995, .003, "Basemap © Esri, DeLorme, NAVTEQ", ha="right", fontsize=6.5, color="#7b858a")
     # Reserve a clean right-hand rail exclusively for the vertical legends.
     fig.subplots_adjust(left=.012, right=.90, top=.955, bottom=.012, hspace=.085)
-    out = ROOT / "current_image_vertical.png"
+    out = ROOT / "results" / "current_image_vertical.png"
     fig.savefig(out, dpi=240, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     print(f"Wrote {out}")
