@@ -107,16 +107,14 @@ uv sync --extra notebooks --extra cascade
 
 ### Cascade R-CNN / Detectron2
 
-Cascade R-CNN experiments use Detectron2. Detectron2 is intentionally not
-included in the project's universal UV environment because it must be built
-against a compatible PyTorch, compiler, and, where applicable, CUDA
-configuration.
+The Cascade R-CNN experiments use [Detectron2](https://github.com/facebookresearch/detectron2). Detectron2 is intentionally not included in the project's universal UV environment because its installation depends on a compatible PyTorch, compiler, and, where applicable, CUDA configuration.
 
 The `cascade` extra installs the remaining Python dependencies used by the
 Cascade R-CNN notebooks:
 
 ```bash
 uv sync --extra notebooks --extra cascade
+```
 
 ## Methodology
 
