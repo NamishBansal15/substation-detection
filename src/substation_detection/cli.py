@@ -33,6 +33,7 @@ def cmd_figures() -> int:
 
     scripts = [
         ("model_performance_graph.py", ()),
+        ("substation_component_distribution_graph.py", ()),
         ("substation_inference_bar_scatter_graph.py", ()),
         ("substation_inference_choropleth_graphs.py", ()),
         ("substation_inference_choropleth_graphs.py", ("--vertical",)),

@@ -17,7 +17,10 @@ tempfile.TemporaryDirectory = lambda *args, **kwargs: SimpleNamespace(name=str(_
 tempfile.mkdtemp = lambda *args, **kwargs: str(_CACHE)
 
 import geopandas as gpd
-import contextily as ctx
+try:
+    import contextily as ctx
+except ImportError:  # Optional: figures retain an offline background without map tiles.
+    ctx = None
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd

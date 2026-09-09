@@ -36,7 +36,10 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.ticker as mticker
 import matplotlib.patches as patches
-import contextily as ctx
+try:
+    import contextily as ctx
+except ImportError:  # Optional: figures retain an offline background without map tiles.
+    ctx = None
 from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from bokeh.sampledata.us_states import data as state_data

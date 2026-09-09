@@ -24,3 +24,12 @@ def test_prediction_ids_match_metadata_ids():
     pred = pd.read_csv(DATA_DIR / "component_predictions.csv")
     meta = pd.read_csv(DATA_DIR / "image_metadata.csv")
     assert set(pred["id"]) == set(meta["id"])
+
+
+def test_substation_overall_count_is_retained_component_sum():
+    pred = pd.read_csv(DATA_DIR / "component_predictions.csv")
+    overall = pred[list(RETAINED_COMPONENTS)].sum(axis=1)
+    assert len(overall) == 11085
+    assert overall.max() == 29
+    assert round(float(overall.mean()), 5) == 2.03843
+    assert float(overall.median()) == 1.0
